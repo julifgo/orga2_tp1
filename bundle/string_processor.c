@@ -40,7 +40,23 @@ uint32_t str_len(char* a) {
 }
 
 //TODO: DEBE IMPLEMENTAR
-char* str_copy(char* a) { return NULL; }
+char* str_copy(char* a) { 
+	uint32_t len = str_len(a);
+	uint32_t i = 0;
+	
+	char *destination=malloc(len);
+
+    while(i < len)
+    {
+        *destination = a[i];
+        //(*destination[i]) = a[i];
+        i++;
+    }
+
+    
+    return destination;
+	
+}
 
 //TODO: DEBE IMPLEMENTAR
 int32_t str_cmp(char* a, char* b) { return -1000;}

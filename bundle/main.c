@@ -12,7 +12,11 @@ void test_create_destroy_list(){
 	char *msg = "Lista 1";
 	string_proc_list *lista = string_proc_list_create(msg);
 	//printf("%s\n", lista->name);
+	char *copy = str_copy(msg);
+	printf("%s\n", msg);
+	printf("%s\n",copy );
 	string_proc_list_destroy(lista);
+	free(copy);
 }
 
 /**
@@ -123,7 +127,7 @@ void run_tests(){
 
 	test_print_list();
 
-	test_shift_2();
+	/*test_shift_2();
 	
 	test_shift_position();
 
@@ -133,7 +137,7 @@ void run_tests(){
 
 	test_combo_reversible();
 
-	test_combo_irreversible();
+	test_combo_irreversible();*/
 }
 
 int main (void){
