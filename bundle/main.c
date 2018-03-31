@@ -9,6 +9,11 @@
 *	crea y destruye a una lista vacía
 */
 void test_create_destroy_list(){
+	char msg[11] = "Hola mundo\n";
+	string_proc_list *lista = string_proc_list_create(msg);
+	printf("Lista creada\n");
+	string_proc_list_destroy(lista);
+	printf("Lista destruida\n");
 }
 
 /**
