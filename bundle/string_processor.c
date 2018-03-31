@@ -31,8 +31,13 @@ string_proc_list* string_proc_list_filter_by_type(string_proc_list* list, string
 string_proc_list* string_proc_list_invert(string_proc_list* list){	return NULL;}
 
 /** AUX FUNCTIONS **/
-//TODO: DEBE IMPLEMENTAR
-uint32_t str_len(char* a) { return 0; }
+uint32_t str_len(char* a) { 
+	uint32_t len = 0;
+	while(a[len]!='\0'){
+		len ++;
+	}
+	return len;
+}
 
 //TODO: DEBE IMPLEMENTAR
 char* str_copy(char* a) { return NULL; }
@@ -60,9 +65,21 @@ char saturate_int(int32_t value){
 }
 
 //TODO: DEBE IMPLEMENTAR
-void shift_2(string_proc_key* key){}
+void shift_2(string_proc_key* key){
+	uint32_t i = 0;
+	while(i < key->length){
+		(key->value)[i] = (key->value)[i] + 2;
+		i++;
+	}
+}
 //TODO: DEBE IMPLEMENTAR
-void unshift_2(string_proc_key* key){}
+void unshift_2(string_proc_key* key){
+	uint32_t i = 0;
+	while(i < key->length){
+		(key->value)[i] = (key->value)[i] - 2;
+		i++;
+	}
+}
 //TODO: DEBE IMPLEMENTAR
 void shift_position(string_proc_key* key){}
 //TODO: DEBE IMPLEMENTAR
