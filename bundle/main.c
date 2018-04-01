@@ -21,6 +21,7 @@ void test_create_destroy_list(){
 */
 void test_create_destroy_node(){
 	string_proc_node* node	= string_proc_node_create(&shift_2, &unshift_2, REVERSIBLE);
+	//printf("%s\n", string_proc_func_type_string(node->type));
 	string_proc_node_destroy(node);
 }
 
@@ -276,9 +277,9 @@ void run_tests(){
 	//tests principales
 	test_create_destroy_list();
 
-	/*test_create_destroy_node();
+	test_create_destroy_node();
 
-	test_create_destroy_key();
+	/*test_create_destroy_key();
 
 	test_print_list();
 

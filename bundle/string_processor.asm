@@ -15,6 +15,13 @@
 	%define struct_lista_offset_nombre 0
 	%define struct_lista_offset_first 8
 	%define struct_lista_offset_last 16
+; Definicion Size and offsets de node
+	%define struct_node_size 40 ;punteros next y prev: 8, direcciones memoria func: 8, enum: 8
+	%define struct_node_offset_next 0
+	%define struct_node_offset_previous 8
+	%define struct_node_offset_f 16
+	%define struct_node_offset_g 24
+	%define struct_node_offset_type 32
 
 
 section .data
@@ -27,7 +34,7 @@ string_proc_list_create:
 	push rbp
 	mov rbp, rsp
 	push rdi ;preservo el parametro pasado al metodo
-	;chequear si en rdi viene algo asignado.
+	
 	mov rdi, struct_lista_size ;pido memoria para almacenar la estructura de una lista
 	call malloc
 
@@ -42,6 +49,23 @@ string_proc_list_create:
 
 global string_proc_node_create
 string_proc_node_create:
+	push rbp
+	mov rbp, rsp
+	push rdi
+
+	mov rdi, struct_node_size ;pido memoria para almacenar la estructura de un nodo
+	call malloc	
+
+	pop rdi ;recupero el parametro
+	mov rdx, NULL ;rdx no debe ser preservado
+
+	mov [rax + struct_node_offset_next], rdx
+	mov [rax + struct_node_offset_previous], rdx
+	mov [rax + struct_node_offset_f], rdi ;en rdi tengo la direccion de memoria de f
+	mov [rax + struct_node_offset_g], rsi ;en rsi tengo la direccion de memoria de g
+	mov [rax + struct_node_offset_type], rdx ;en rdx tengo el valor del enum type
+
+	pop rbp
 	ret
 
 global string_proc_key_create
@@ -61,6 +85,21 @@ string_proc_list_destroy:
 
 global string_proc_node_destroy
 string_proc_node_destroy:
+	push rbp
+	mov rbp, rsp
+	
+	mov rdx, NULL
+
+	;en rdi tengo el puntero al nodo
+	mov [rdi + struct_node_offset_next], rdx
+	mov [rdi + struct_node_offset_previous], rdx
+	mov [rdi + struct_node_offset_f], rdx
+	mov [rdi + struct_node_offset_g], rdx
+
+	call free
+
+
+	pop rbp
 	ret
 
 global string_proc_key_destroy
