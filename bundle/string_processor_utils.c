@@ -7,7 +7,16 @@
 /**
 *	Debe devolver el largo de la lista pasada por parámetro
 */
-uint32_t string_proc_list_length(string_proc_list* list){ return 0; }
+uint32_t string_proc_list_length(string_proc_list* list){ 
+	uint32_t len = 0;
+	string_proc_node *nodo = list->first;
+	while (nodo != NULL)
+	{
+		len++;
+		nodo = nodo->next; //el next del ultimo es NULL
+	}
+	return len; 
+}
 
 //TODO: debe implementar
 /**

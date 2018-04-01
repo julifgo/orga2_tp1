@@ -4,6 +4,9 @@
 	extern fopen
 	extern fclose
 	extern fprintf
+; FUNCIONES DE STRING_PROCESSOR DE C
+	extern str_len
+	extern str_copy
 
 ; /** defines bool y puntero **/
 	%define NULL 0
@@ -22,6 +25,10 @@
 	%define struct_node_offset_f 16
 	%define struct_node_offset_g 24
 	%define struct_node_offset_type 32
+; Definicion Size and offsets de key
+	%define struct_key_size 12 ;puntero nombre 8, length es uint32 (doubleword unsigned int) 4
+	%define struct_key_offset_length 0
+	%define struct_key_offset_value 4
 
 
 section .data
@@ -40,6 +47,7 @@ string_proc_list_create:
 
 	pop rdi ;recupero el parametro
 	mov rdx, NULL ;rdx no debe ser preservado
+
 	mov [rax + struct_lista_offset_nombre], rdi
 	mov [rax + struct_lista_offset_first], rdx
 	mov [rax + struct_lista_offset_last], rdx
@@ -59,6 +67,7 @@ string_proc_node_create:
 	pop rdi ;recupero el parametro
 	mov rdx, NULL ;rdx no debe ser preservado
 
+	;TODO. RESOLVER DUDA 2
 	mov [rax + struct_node_offset_next], rdx
 	mov [rax + struct_node_offset_previous], rdx
 	mov [rax + struct_node_offset_f], rdi ;en rdi tengo la direccion de memoria de f
@@ -70,6 +79,29 @@ string_proc_node_create:
 
 global string_proc_key_create
 string_proc_key_create:
+	push rbp
+	mov rbp, rsp
+	push r12
+	push r13
+
+	call str_len ;uso la funcion auxiliar de c de longitud con el value que ya esta en rdi
+	mov r13, rax ;muevo el length del value
+	;es importante moverlo a un registro que deba preservar valor, sino str_copy o malloc podria pisarlo (por ejemplo si se usa rdx e vez de r13)
+
+	call str_copy
+	mov r12, rax
+
+	push rdi ;resguardo el parametro (aunque ya no lo necesito usar mas)
+	mov rdi, struct_key_size
+	call malloc
+	pop rdi
+
+	mov [rax + struct_key_offset_length], r13
+	mov [rax + struct_key_offset_value], r12
+
+	pop r13
+	pop r12
+	pop rbp
 	ret
 
 global string_proc_list_destroy
@@ -104,6 +136,26 @@ string_proc_node_destroy:
 
 global string_proc_key_destroy
 string_proc_key_destroy:
+	push rbp
+	mov rbp, rsp
+
+	push rdi ;resguardo el puntero a key, puesto que en rdi debo poner el value para liberarlo
+
+	mov rdx, [rdi + struct_key_offset_value] ;leo el puntero a value
+	mov rdi, rdx
+	call free ;libero value
+
+	pop rdi
+
+	mov rdx, 0
+	mov [rdi + struct_key_offset_length], rdx
+	mov rdx, NULL
+	mov [rdi + struct_key_offset_value], rdx
+
+	call free
+
+
+	pop rbp
 	ret
 
 global string_proc_list_add_node

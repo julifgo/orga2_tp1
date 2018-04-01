@@ -1,1 +1,3 @@
 1) en destroy de nodo, segun el pseudocodigo provisto, se nullean los punteros de next, previous, f y g. ¿Por que? Si al hacer el free, todo ese bloque de memoria le quedara al SO para que haga lo que quiera. ¿Es por si intenta acceder al nodo ya liberado, para que no pueda acceder a datos del programa?
+
+2) en el create de nodo, es necesario hacer un mov (o un push) de rsi y rdx para luego asignarlos al struct? Ya que al no ser registros preservables, la llamada al malloc podria corromperlos

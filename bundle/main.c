@@ -11,6 +11,7 @@
 */
 void test_create_destroy_list(){
 	string_proc_list * list	= string_proc_list_create("nueva lista");
+	//printf("%s\n", list->name);
 	string_proc_list_destroy(list);
 }
 
@@ -29,7 +30,9 @@ void test_create_destroy_node(){
 *	crea y destruye una clave 
 */
 void test_create_destroy_key(){
-	string_proc_key* key	= string_proc_key_create("hola mundo");
+	char *msg = "hola";
+	string_proc_key* key	= string_proc_key_create(msg);
+	//printf("%s ; length %d\n",key->value, key->length );
 	string_proc_key_destroy(key);
 }
 
@@ -226,6 +229,11 @@ void test_combo_irreversible(){
 */
 void test_list_length(){
 	printf("Probando largo lista\n============\n");
+	string_proc_list * list	= string_proc_list_create("lista vacia");
+	uint32_t l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+
+	string_proc_list_destroy(list);
 }
 
 //TODO:debe implementar
@@ -279,9 +287,9 @@ void run_tests(){
 
 	test_create_destroy_node();
 
-	/*test_create_destroy_key();
+	test_create_destroy_key();
 
-	test_print_list();
+	/*test_print_list();
 
 	test_shift_2();
 	
@@ -305,6 +313,8 @@ void run_tests(){
 	test_list_apply_print_trace();
 
 	test_odd_prime();*/
+
+	test_list_length();
 
 }
 
