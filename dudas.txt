@@ -1,3 +1,8 @@
 1) en destroy de nodo, segun el pseudocodigo provisto, se nullean los punteros de next, previous, f y g. ¿Por que? Si al hacer el free, todo ese bloque de memoria le quedara al SO para que haga lo que quiera. ¿Es por si intenta acceder al nodo ya liberado, para que no pueda acceder a datos del programa?
 
 2) en creacion de lista, hago push y pop de rdi aunque luego no lo use. Es correcto pisar parametros si luego no van a usarse, o siempre se deben recuperar (como buena practica)?
+
+3) Es necesario actualizar el pseudocodigo provisto al codigo asm?
+
+4) las funciones encode y decode provistas por ellos no tienen test corto en main. En teoria la funcion apply de asm, no deberia ser privada y solo "hablar" con ella a traves de encode y decode?
+

@@ -236,4 +236,42 @@ string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
 
 global string_proc_list_apply
 string_proc_list_apply:
+	push rbp
+	mov rbp, rsp
+	push r12
+	push r13
+	push r14
+
+	;rdi -> lista
+	;rsi -> key
+	;rdx -> bool
+
+	mov r13, rdi ;muevo la lista a r13, para dejar rdi para los call
+	cmp rdx, FALSE
+	JE decode ;si encode==false => decode
+		mov r12, [r13 + struct_lista_offset_first]
+		ciclo_encode:
+		CMP r12, NULL
+		JE fin_apply
+		mov rdi, rsi
+		mov r14, [r12 + struct_node_offset_f]
+		call r14
+		mov r12, [r12 + struct_node_offset_next]
+		JMP ciclo_encode
+	decode:
+		mov r12, [r13 + struct_lista_offset_last]
+		ciclo_decode:
+		CMP r12, NULL
+		JE fin_apply
+		mov rdi, rsi
+		mov r14, [r12 + struct_node_offset_g]
+		call r14
+		mov r12, [r12 + struct_node_offset_previous]
+		JMP ciclo_decode
+
+	fin_apply:
+	pop r14
+	pop r13
+	pop r12
+	pop rbp
 	ret

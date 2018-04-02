@@ -337,6 +337,8 @@ void run_tests(){
 
 	test_list_length();
 
+	test_shift_2();
+
 }
 
 int main (void){

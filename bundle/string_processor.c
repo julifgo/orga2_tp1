@@ -197,13 +197,13 @@ char saturate_int(int32_t value){
 
 void shift_2(string_proc_key* key){
 	uint32_t i;
-	for(i = 0; i < key->length; i++){
+	for(i = 0; i < key->length -1; i++){
 		key->value[i] = wrap_around_int(((int32_t)key->value[i]) + 2);
 	}
 }
 void unshift_2(string_proc_key* key){
 	uint32_t i;
-	for(i = 0; i < key->length; i++){
+	for(i = 0; i < key->length -1; i++){
 		key->value[i] = wrap_around_int(((int32_t)key->value[i]) - 2);
 	}
 }
