@@ -186,7 +186,6 @@ string_proc_key_destroy:
 
 	call free
 
-
 	pop rbp
 	ret
 
@@ -194,7 +193,7 @@ global string_proc_list_add_node
 string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
 	push rbp
 	mov rbp, rsp
-
+	push r12
 	;rdi -> puntero a lista
 	;rsi -> f
 	;rdx -> g
@@ -215,12 +214,23 @@ string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
 	pop rdx
 	pop rsi
 	pop rdi
-	;TODO. ESTO NO ESTA BIEN AUN
+	
+	mov r12, [rdi + struct_lista_offset_last] ;puntero al ultimo nodo de la lista
+	cmp r12, NULL
+	JE lista_vacia ;si r12 es null, la lista esta vacia
+
+	;en rax tengo el nodo nuevo, en rdi la lista y en r12 un puntero al ultimo nodo
+	mov [r12 + struct_node_offset_next], rax
+	mov [rax + struct_node_offset_previous], r12
+	mov [rdi + struct_lista_offset_last], rax
+	JMP fin_metodo
+
+	lista_vacia:
 	mov [rdi + struct_lista_offset_first], rax
 	mov [rdi + struct_lista_offset_last], rax
-
-
-
+	
+	fin_metodo:
+	pop r12
 	pop rbp
 	ret
 

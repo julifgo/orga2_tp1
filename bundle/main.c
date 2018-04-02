@@ -237,7 +237,15 @@ void test_list_length(){
 	l1 = string_proc_list_length(list);
 	printf("largo de lista %s: %d\n", list->name, l1);
 
-	//string_proc_list_print(list, stdout);
+
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &shift_position, &unshift_position, REVERSIBLE);
+	
+	l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+	string_proc_list_print(list, stdout);
 
 	string_proc_list_destroy(list);
 }
