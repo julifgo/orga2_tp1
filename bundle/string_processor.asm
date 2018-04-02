@@ -37,21 +37,26 @@ section .data
 section .text
 
 global string_proc_list_create
-string_proc_list_create:
+string_proc_list_create: 
 	push rbp
 	mov rbp, rsp
+	push r12
 	push rdi ;preservo el parametro pasado al metodo
 	
+	call str_copy
+	mov r12, rax
+
 	mov rdi, struct_lista_size ;pido memoria para almacenar la estructura de una lista
 	call malloc
 
 	pop rdi ;recupero el parametro
 	mov rdx, NULL ;rdx no debe ser preservado
 
-	mov [rax + struct_lista_offset_nombre], rdi
+	mov [rax + struct_lista_offset_nombre], r12
 	mov [rax + struct_lista_offset_first], rdx
 	mov [rax + struct_lista_offset_last], rdx
 
+	pop r12
 	pop rbp
 	ret
 
@@ -59,17 +64,21 @@ global string_proc_node_create
 string_proc_node_create:
 	push rbp
 	mov rbp, rsp
-	push rdi
+	push rdi ;pusheo todos los parametros, ya que al no ser preservables, malloc podria romperlos
+	push rsi
+	push rdx
 
 	mov rdi, struct_node_size ;pido memoria para almacenar la estructura de un nodo
 	call malloc	
 
-	pop rdi ;recupero el parametro
-	mov rdx, NULL ;rdx no debe ser preservado
+	pop rdx ;recupero el parametro
+	pop rsi
+	pop rdi 
 
-	;TODO. RESOLVER DUDA 2
-	mov [rax + struct_node_offset_next], rdx
-	mov [rax + struct_node_offset_previous], rdx
+	mov rcx, NULL ;rcx no debe ser preservado
+
+	mov [rax + struct_node_offset_next], rcx
+	mov [rax + struct_node_offset_previous], rcx
 	mov [rax + struct_node_offset_f], rdi ;en rdi tengo la direccion de memoria de f
 	mov [rax + struct_node_offset_g], rsi ;en rsi tengo la direccion de memoria de g
 	mov [rax + struct_node_offset_type], rdx ;en rdx tengo el valor del enum type
@@ -108,10 +117,32 @@ global string_proc_list_destroy
 string_proc_list_destroy:
 	push rbp
 	mov rbp, rsp
-	;TODO. DEBEMOS LIBERAR NODOS.
+	push r12
+	push r13
 
+	mov r13, rdi ;muevo la lista a r13
+
+	mov rdi, [r13 + struct_lista_offset_nombre]
 	call free
 
+	mov rdi, [r13 + struct_lista_offset_first] ;me paro en el primer nodo
+	ciclo:
+		cmp rdi, NULL ;si no hay mas nodos, ya libere todos (o no habia ninguno)
+		JE fin_borrado_nodos
+		mov r12, [rdi + struct_node_offset_next] ;antes de destruirlo, tomo el next
+		call string_proc_node_destroy ;lo destruyo
+		mov rdi, r12
+	JMP ciclo
+
+	fin_borrado_nodos: ;una vez liberados todos los nodos, libero la lista
+	mov rdi, r13 ;muevo la lista otra vez a rdi
+	mov r12, NULL
+	mov [rdi + struct_lista_offset_first], r12
+	mov [rdi + struct_lista_offset_last], r12
+	call free
+
+	pop r13
+	pop r12
 	pop rbp
 	ret
 
@@ -119,18 +150,19 @@ global string_proc_node_destroy
 string_proc_node_destroy:
 	push rbp
 	mov rbp, rsp
+	push r12
 	
-	mov rdx, NULL
+	mov r12, NULL
 
 	;en rdi tengo el puntero al nodo
-	mov [rdi + struct_node_offset_next], rdx
-	mov [rdi + struct_node_offset_previous], rdx
-	mov [rdi + struct_node_offset_f], rdx
-	mov [rdi + struct_node_offset_g], rdx
+	mov [rdi + struct_node_offset_next], r12
+	mov [rdi + struct_node_offset_previous], r12
+	mov [rdi + struct_node_offset_f], r12
+	mov [rdi + struct_node_offset_g], r12
 
 	call free
 
-
+	pop r12
 	pop rbp
 	ret
 
@@ -159,7 +191,37 @@ string_proc_key_destroy:
 	ret
 
 global string_proc_list_add_node
-string_proc_list_add_node:
+string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
+	push rbp
+	mov rbp, rsp
+
+	;rdi -> puntero a lista
+	;rsi -> f
+	;rdx -> g
+	;rcx -> type
+	;para llamar al metodo node_create, debemos cambiar el orden de los parametros
+
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rdi, rsi ;f es el primer parametro
+	mov rsi, rdx ;g es el segundo
+	mov rdx, rcx ;type el tercero
+	call string_proc_node_create
+
+	pop rcx ;recupero los parametros en el orden original
+	pop rdx
+	pop rsi
+	pop rdi
+	;TODO. ESTO NO ESTA BIEN AUN
+	mov [rdi + struct_lista_offset_first], rax
+	mov [rdi + struct_lista_offset_last], rax
+
+
+
+	pop rbp
 	ret
 
 global string_proc_list_apply

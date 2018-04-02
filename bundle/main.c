@@ -22,7 +22,7 @@ void test_create_destroy_list(){
 */
 void test_create_destroy_node(){
 	string_proc_node* node	= string_proc_node_create(&shift_2, &unshift_2, REVERSIBLE);
-	//printf("%s\n", string_proc_func_type_string(node->type));
+	printf("%s\n", string_proc_func_type_string(node->type));
 	string_proc_node_destroy(node);
 }
 
@@ -229,9 +229,15 @@ void test_combo_irreversible(){
 */
 void test_list_length(){
 	printf("Probando largo lista\n============\n");
-	string_proc_list * list	= string_proc_list_create("lista vacia");
+	string_proc_list * list	= string_proc_list_create("lista length");
 	uint32_t l1 = string_proc_list_length(list);
 	printf("largo de lista %s: %d\n", list->name, l1);
+
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+
+	//string_proc_list_print(list, stdout);
 
 	string_proc_list_destroy(list);
 }
@@ -248,6 +254,7 @@ void test_list_length(){
 */
 void test_list_add_remove_node(){
 	printf("Probando agregar y quitar nodo\n============\n");
+
 }
 
 //TODO:debe implementar
@@ -283,13 +290,13 @@ void test_odd_prime(){
 void run_tests(){
 
 	//tests principales
-	test_create_destroy_list();
+	/*test_create_destroy_list();
 
 	test_create_destroy_node();
 
 	test_create_destroy_key();
 
-	/*test_print_list();
+	test_print_list();
 
 	test_shift_2();
 	
@@ -313,6 +320,12 @@ void run_tests(){
 	test_list_apply_print_trace();
 
 	test_odd_prime();*/
+
+	test_create_destroy_list();
+
+	test_create_destroy_node();
+
+	test_create_destroy_key();
 
 	test_list_length();
 
