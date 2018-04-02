@@ -253,7 +253,7 @@ string_proc_list_apply:
 		ciclo_encode:
 		CMP r12, NULL
 		JE fin_apply
-		mov rdi, rsi
+		mov rdi, rsi ;como rdi no es preservable, lo vuelvo a asignar en cada iteracion del ciclo
 		mov r14, [r12 + struct_node_offset_f]
 		call r14
 		mov r12, [r12 + struct_node_offset_next]
