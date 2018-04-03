@@ -27,7 +27,47 @@ uint32_t string_proc_list_length(string_proc_list* list){
 *	si index es mayor al largo de la lista no debe insertar el nodo
 *	debe devolver true si el nodo pudo ser insertado en la lista, false en caso contrario
 */
-bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, string_proc_func g, string_proc_func_type type, uint32_t index){ return false; }
+bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, string_proc_func g, string_proc_func_type type, uint32_t index){ 
+	/*Si index == list_length => inserta al final. Siguiendo esa lógica,si el index es 0, se inserta al principio. Si es 1, se inserta segundo, si es list_length -1 anteultimo*/
+	/*if(index > string_proc_list_length(list))
+		return false; 
+		
+	if(string_proc_list_length(list) == 0){
+		string_proc_list_add_node(list, f, g, type);
+		return true;
+	}
+	
+	string_proc_node* node	= string_proc_node_create(f, g, type);
+	if(index==0){
+		//INSERTAR AL PPIO
+		string_proc_node* firstNode = list->first;
+		firstNode->previous = node;
+		node->next = firstNode;
+		list->first = node;
+		return true;
+	}
+	if(index==string_proc_list_length(list)){
+		//INSERTAR AL FINAL
+		string_proc_node* lastNode = list->last;
+		lastNode->next = node;
+		node->previous = lastNode;
+		list->last = node;
+		return true;
+	}
+	//CASO CONTRARIO. RECORRER LA LISTA A LA POSICION DESEADA
+	uint32_t i = 0;
+	string_proc_node* current_node	= list->first;
+	while(i < index){
+		current_node = current_node->next;
+		i++;
+	}
+	//a la salida del ciclo, node debe ser insertado como previo a current_node
+	node->previous = current_node->previous;
+	current_node->previous->next = node;
+	current_node->previous = node;
+	node->next = current_node;*/
+	return true;
+}
 
 //TODO: debe implementar
 /**
