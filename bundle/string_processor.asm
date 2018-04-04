@@ -38,39 +38,44 @@ section .text
 
 global string_proc_list_create
 string_proc_list_create: 
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
-	push rdi ;preservo el parametro pasado al metodo
+	push r12 ;desalineada
+	sub rsp, 8 ;alineada
+	
+	
 	
 	call str_copy
 	mov r12, rax
 
 	mov rdi, struct_lista_size ;pido memoria para almacenar la estructura de una lista
 	call malloc
-
-	pop rdi ;recupero el parametro
+	
 	mov rdx, NULL ;rdx no debe ser preservado
 
 	mov [rax + struct_lista_offset_nombre], r12
 	mov [rax + struct_lista_offset_first], rdx
 	mov [rax + struct_lista_offset_last], rdx
 
+	add rsp, 8 ;alineada
+	pop r13
 	pop r12
 	pop rbp
 	ret
 
 global string_proc_node_create
 string_proc_node_create:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push rdi ;pusheo todos los parametros, ya que al no ser preservables, malloc podria romperlos
-	push rsi
-	push rdx
+	push rdi ;desalineada
+	push rsi ;alineada
+	push rdx ;desalineada
+	sub rsp, 8 ;alineada
 
 	mov rdi, struct_node_size ;pido memoria para almacenar la estructura de un nodo
 	call malloc	
 
+	add rsp, 8
 	pop rdx ;recupero el parametro
 	pop rsi
 	pop rdi 
@@ -88,10 +93,10 @@ string_proc_node_create:
 
 global string_proc_key_create
 string_proc_key_create:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
-	push r13
+	push r12 ;desalineada
+	push r13 ;alineada
 
 	call str_len ;uso la funcion auxiliar de c de longitud con el value que ya esta en rdi
 	mov r13, rax ;muevo el length del value
@@ -99,11 +104,9 @@ string_proc_key_create:
 
 	call str_copy
 	mov r12, rax
-
-	push rdi ;resguardo el parametro (aunque ya no lo necesito usar mas)
+	
 	mov rdi, struct_key_size
 	call malloc
-	pop rdi
 
 	mov [rax + struct_key_offset_length], r13
 	mov [rax + struct_key_offset_value], r12
@@ -115,10 +118,10 @@ string_proc_key_create:
 
 global string_proc_list_destroy
 string_proc_list_destroy:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
-	push r13
+	push r12 ;desalineada
+	push r13 ;alineada
 
 	mov r13, rdi ;muevo la lista a r13
 
@@ -148,9 +151,10 @@ string_proc_list_destroy:
 
 global string_proc_node_destroy
 string_proc_node_destroy:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
+	push r12 ;desalineada
+	sub rsp, 8 ;alineada
 	
 	mov r12, NULL
 
@@ -162,22 +166,24 @@ string_proc_node_destroy:
 
 	call free
 
+	add rsp, 8
 	pop r12
 	pop rbp
 	ret
 
 global string_proc_key_destroy
 string_proc_key_destroy:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-
-	push rdi ;resguardo el puntero a key, puesto que en rdi debo poner el value para liberarlo
-
+	push rdi  ;desalineada ;resguardo el puntero a key, puesto que en rdi debo poner el value para liberarlo
+	sub rsp, 8 ;alineada
+	
 	mov rdx, [rdi + struct_key_offset_value] ;leo el puntero a value
 	mov rdi, rdx
 	call free ;libero value
-
-	pop rdi
+	
+	add rsp, 8 ;desalineada
+	pop rdi ;alineada
 
 	mov rdx, 0
 	mov [rdi + struct_key_offset_length], rdx
@@ -191,29 +197,32 @@ string_proc_key_destroy:
 
 global string_proc_list_add_node
 string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
+	push r12 ;desalineada
 	;rdi -> puntero a lista
 	;rsi -> f
 	;rdx -> g
 	;rcx -> type
 	;para llamar al metodo node_create, debemos cambiar el orden de los parametros
 
-	push rdi
-	push rsi
-	push rdx
-	push rcx
+	push rdi ;alineada
+	push rsi ;desalineada
+	push rdx ;alineada 
+	push rcx ;desalineada
+	sub rsp, 8 ;alineada
 
 	mov rdi, rsi ;f es el primer parametro
 	mov rsi, rdx ;g es el segundo
 	mov rdx, rcx ;type el tercero
 	call string_proc_node_create
 
-	pop rcx ;recupero los parametros en el orden original
-	pop rdx
-	pop rsi
-	pop rdi
+	add rsp, 8 ;desalineada
+	pop rcx ;alineada ;recupero los parametros en el orden original
+	pop rdx ;desalineada
+	pop rsi ;alineada
+	pop rdi ;desalineada
+	sub rsp, 8 ;alineada
 	
 	mov r12, [rdi + struct_lista_offset_last] ;puntero al ultimo nodo de la lista
 	cmp r12, NULL
@@ -230,17 +239,19 @@ string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
 	mov [rdi + struct_lista_offset_last], rax
 	
 	fin_metodo:
+	add rsp, 8
 	pop r12
 	pop rbp
 	ret
 
 global string_proc_list_apply
 string_proc_list_apply:
-	push rbp
+	push rbp ;alineada
 	mov rbp, rsp
-	push r12
-	push r13
-	push r14
+	push r12 ;desalineada
+	push r13 ;alineada
+	push r14 ;desalineada
+	sub rsp, 8 ;alineada
 
 	;rdi -> lista
 	;rsi -> key
@@ -270,6 +281,7 @@ string_proc_list_apply:
 		JMP ciclo_decode
 
 	fin_apply:
+	add rsp, 8
 	pop r14
 	pop r13
 	pop r12
