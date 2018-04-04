@@ -19,7 +19,7 @@
 	%define struct_lista_offset_first 8
 	%define struct_lista_offset_last 16
 ; Definicion Size and offsets de node
-	%define struct_node_size 40 ;punteros next y prev: 8, direcciones memoria func: 8, enum: 8
+	%define struct_node_size 40 ;punteros next y prev: 8, direcciones memoria func: 8, enum: 4
 	%define struct_node_offset_next 0
 	%define struct_node_offset_previous 8
 	%define struct_node_offset_f 16
@@ -43,22 +43,19 @@ string_proc_list_create:
 	push r12 ;desalineada
 	sub rsp, 8 ;alineada
 	
-	
-	
 	call str_copy
 	mov r12, rax
 
 	mov rdi, struct_lista_size ;pido memoria para almacenar la estructura de una lista
 	call malloc
 	
-	mov rdx, NULL ;rdx no debe ser preservado
+	mov rdx, NULL
 
 	mov [rax + struct_lista_offset_nombre], r12
 	mov [rax + struct_lista_offset_first], rdx
 	mov [rax + struct_lista_offset_last], rdx
 
-	add rsp, 8 ;alineada
-	pop r13
+	add rsp, 8
 	pop r12
 	pop rbp
 	ret
@@ -69,14 +66,15 @@ string_proc_node_create:
 	mov rbp, rsp
 	push rdi ;desalineada
 	push rsi ;alineada
-	push rdx ;desalineada
+	push rdx ;desalineada ;TODO. RESOLVER DUDA 1 PARA SABER SI LA PARTE ALTA DE ESTE REGISTRO PODRIA VENIR SUCIA
 	sub rsp, 8 ;alineada
 
 	mov rdi, struct_node_size ;pido memoria para almacenar la estructura de un nodo
 	call malloc	
 
+	xor rdx, rdx ;limpio rdx ya que ahi ira el enum de 4 bytes del tipo
 	add rsp, 8
-	pop rdx ;recupero el parametro
+	pop rdx 
 	pop rsi
 	pop rdi 
 
@@ -97,11 +95,15 @@ string_proc_key_create:
 	mov rbp, rsp
 	push r12 ;desalineada
 	push r13 ;alineada
-
+	
+	mov r12, rdi ;resguardo rdi para no perderlo luego del call
+	
 	call str_len ;uso la funcion auxiliar de c de longitud con el value que ya esta en rdi
+	xor r13, r13 ;limpio r13 ya que str_len devuelve doubleword (unsigned)
 	mov r13, rax ;muevo el length del value
-	;es importante moverlo a un registro que deba preservar valor, sino str_copy o malloc podria pisarlo (por ejemplo si se usa rdx e vez de r13)
+	;es importante moverlo a un registro que deba preservar valor, sino str_copy o malloc podria pisarlo (por ejemplo si se usara rdx e vez de r13)
 
+	mov rdi, r12
 	call str_copy
 	mov r12, rax
 	
@@ -116,7 +118,7 @@ string_proc_key_create:
 	pop rbp
 	ret
 
-global string_proc_list_destroy
+global string_proc_list_destroy ;TODO. Chequear desde aca
 string_proc_list_destroy:
 	push rbp ;alineada
 	mov rbp, rsp
