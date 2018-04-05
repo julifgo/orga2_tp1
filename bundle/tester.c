@@ -50,7 +50,7 @@ void test_1_element(){
 	string_proc_key_destroy(key);
 	FILE_OP(filename_1,fputs( ">>>>>>>>>>>>>>>> CLAVE DESTRUIDA\n", pFile );)
 	FILE_OP(filename_1,fputs( ">>>>>>>>>>>>>>>> PROBANDO STR_LEN \n", pFile );)
-	FILE_OP(filename_1,fprintf(pFile, "%d\n", str_len("largo a probar"));)
+	FILE_OP(filename_1,fprintf(pFile, "%d\n", str_len("largo a probar")+1);)
 	FILE_OP(filename_1,fputs( ">>>>>>>>>>>>>>>> PROBANDO STR_COPY / STR_CMP\n", pFile );)
 	char* copy	= str_copy("largo a probar");
 	FILE_OP(filename_1,fprintf(pFile, "%s\n", str_cmp("largo a probar", copy) == 0 ? "OK" : "NOK");)

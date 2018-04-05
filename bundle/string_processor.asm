@@ -118,7 +118,7 @@ string_proc_key_create:
 	pop rbp
 	ret
 
-global string_proc_list_destroy ;TODO. Chequear desde aca
+global string_proc_list_destroy 
 string_proc_list_destroy:
 	push rbp ;alineada
 	mov rbp, rsp
@@ -180,8 +180,7 @@ string_proc_key_destroy:
 	push rdi  ;desalineada ;resguardo el puntero a key, puesto que en rdi debo poner el value para liberarlo
 	sub rsp, 8 ;alineada
 	
-	mov rdx, [rdi + struct_key_offset_value] ;leo el puntero a value
-	mov rdi, rdx
+	mov rdi, [rdi + struct_key_offset_value] ;leo el puntero a value
 	call free ;libero value
 	
 	add rsp, 8 ;desalineada
@@ -253,37 +252,38 @@ string_proc_list_apply:
 	push r12 ;desalineada
 	push r13 ;alineada
 	push r14 ;desalineada
-	sub rsp, 8 ;alineada
+	push r15 ;alineada
 
 	;rdi -> lista
 	;rsi -> key
-	;rdx -> bool
+	;rdx -> bool (1 byte)
 
 	mov r13, rdi ;muevo la lista a r13, para dejar rdi para los call
-	cmp rdx, FALSE
-	JE decode ;si encode==false => decode
+	mov r15, rsi ;muevo la key a r15 para que no se afecte su valor en los call
+	cmp rdx, FALSE ;TODO. DESPEJAR DUDA 1
+	JE .decode ;si encode==false => decode
 		mov r12, [r13 + struct_lista_offset_first]
-		ciclo_encode:
+		.ciclo_encode:
 		CMP r12, NULL
-		JE fin_apply
-		mov rdi, rsi ;como rdi no es preservable, lo vuelvo a asignar en cada iteracion del ciclo
+		JE .fin_apply
+		mov rdi, r15 ;como rdi no es preservable, lo vuelvo a asignar en cada iteracion del ciclo
 		mov r14, [r12 + struct_node_offset_f]
 		call r14
 		mov r12, [r12 + struct_node_offset_next]
-		JMP ciclo_encode
-	decode:
+		JMP .ciclo_encode
+	.decode:
 		mov r12, [r13 + struct_lista_offset_last]
-		ciclo_decode:
+		.ciclo_decode:
 		CMP r12, NULL
-		JE fin_apply
-		mov rdi, rsi
+		JE .fin_apply
+		mov rdi, r15
 		mov r14, [r12 + struct_node_offset_g]
 		call r14
 		mov r12, [r12 + struct_node_offset_previous]
-		JMP ciclo_decode
+		JMP .ciclo_decode
 
-	fin_apply:
-	add rsp, 8
+	.fin_apply:
+	pop r15
 	pop r14
 	pop r13
 	pop r12

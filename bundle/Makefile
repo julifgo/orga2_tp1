@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -Wall -Wextra -pedantic -O0 -g -lm -Wno-unused-variable -Wno-unused-parameter
+CFLAGS= -Wall -Wextra -pedantic -O0 -g -lm -Wno-unused-variable -Wno-unused-parameter -no-pie -fno-pie
 NASM=nasm
 NASMFLAGS=-f elf64 -g -F DWARF
 
@@ -24,5 +24,4 @@ clean:
 	rm -f *.o
 	rm -f main tester
 	rm -f salida.caso.*
-	reset
 

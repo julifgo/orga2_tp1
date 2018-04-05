@@ -152,15 +152,19 @@ string_proc_list* string_proc_list_invert(string_proc_list* list){
 /** AUX FUNCTIONS **/
 uint32_t str_len(char* a) {
 	uint32_t i=0;
-	while(a[i]!=0) i++; i++;
+	while(a[i]!=0) {
+		i++;
+	}
 	return i;
 }
 
 char* str_copy(char* a) {
 	uint32_t len	= str_len(a);
-	char* s=malloc(len);
-	while(len--!=0)
-	{ s[len]=a[len];}
+	char* s=malloc(len+1);
+	s[len] = '\0';
+	while(len--!=0) { 
+		s[len]=a[len];
+	}
 	return s;
 }
 
@@ -197,13 +201,13 @@ char saturate_int(int32_t value){
 
 void shift_2(string_proc_key* key){
 	uint32_t i;
-	for(i = 0; i < key->length -1; i++){
+	for(i = 0; i < key->length; i++){
 		key->value[i] = wrap_around_int(((int32_t)key->value[i]) + 2);
 	}
 }
 void unshift_2(string_proc_key* key){
 	uint32_t i;
-	for(i = 0; i < key->length -1; i++){
+	for(i = 0; i < key->length; i++){
 		key->value[i] = wrap_around_int(((int32_t)key->value[i]) - 2);
 	}
 }
