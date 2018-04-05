@@ -222,7 +222,7 @@ void test_combo_irreversible(){
 	string_proc_list_destroy(list);
 }
 
-//TODO:debe implementar
+
 /**
 *	crea una lista con 0, 1, 5 nodos respectivamente e imprime su longitud 
 */
@@ -263,67 +263,87 @@ void test_list_add_remove_node(){
 	//TODO. Escribir bien los casos de prueba, por ejemplo. si no se puede, printear que no se pudo y que era lo esperado
 	//imprimir todos los estados. cuando se agrega y cuando se remueve
 	printf("Probando agregar y quitar nodo\n============\n");
+	printf("%s\n", "Se crea una lista vacia");
 	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
 	string_proc_list_print(list, stdout);
-	printf("%s\n", "Se agrega un nodo");
+	printf("%s\n", "Se agrega un nodo al comienzo");
 	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
 	string_proc_list_print(list, stdout);
 	printf("%s\n", "Se elimina el nodo");
 	string_proc_list_remove_node_at(list, 0);
 	string_proc_list_print(list, stdout);
-
-
-	//lista vacia
-	/*string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
-	//agregar al ppio
-	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 0);
-	//agregar al final
-	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 2);
-	//agrega anteultimo
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 2);
-	//agrega en el medio
-	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 2);
-	//agrega anteultimo
-	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 4);
-	//agrega al final
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 6);
-	//agrega al ppio
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);*/
-	//string_proc_list_print(list, stdout);
-
-	//agregamos un elemento fuera de rango
-	bool res = string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
-	printf("Se intento agregar un nodo en la posicion 10, el resultado debe ser 0 y es %d\n", res);
+	string_proc_list_destroy(list);
 	
-
-	/*l1 = string_proc_list_length(list);
-	printf("largo de lista %s: %d\n", list->name, l1);
-
-
-	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	//5 nodos
+	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
+	printf("%s\n", "Se crea una lista con 5 nodos irreversibles");
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
 	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
 	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
-	string_proc_list_add_node(list, &shift_position, &unshift_position, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se agrega un nodo reversible al comienzo");
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
+	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se quita nodo reversible al comienzo");
+	string_proc_list_remove_node_at(list, 0);
+	string_proc_list_print(list, stdout);
 	
-	l1 = string_proc_list_length(list);
-	printf("largo de lista %s: %d\n", list->name, l1);
-	string_proc_list_print(list, stdout);*/
+	printf("%s\n", "Se agrega un nodo reversible al final");
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 5);
+	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se quita nodo reversible al final");
+	string_proc_list_remove_node_at(list, 5);
+	string_proc_list_print(list, stdout);
+	
+	bool res = string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
+	printf("Se intento agregar un nodo en la posicion 10, el resultado es %d\n", res);
+	string_proc_list_print(list, stdout);
+	res = string_proc_list_remove_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
+	printf("Se intento quitar un nodo en la posicion 10, el resultado es %d\n", res);
+	string_proc_list_print(list, stdout);
+	
+	printf("%s\n", "Se agrega un nodo reversible en posicion 2");
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 2);
+	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se quita nodo reversible en posicion 2");
+	string_proc_list_remove_node_at(list, 2);
+	string_proc_list_print(list, stdout);
+	
+	string_proc_list_destroy(list);
 
+}
+
+//TODO:debe implementar
+/**
+*	crea una lista con cinco nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
+*	(string_proc_list_invert_order) e imprimir la copia
+*/
+void test_list_invert_order(){
+	printf("Probando invertir el orden de la lista\n============\n");
+	string_proc_list * list	= string_proc_list_create("lista invert_order");
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_print(list, stdout);
+	
+	printf("%s\n", "Se invierte la lista");
+	
+	string_proc_list * list_inverted = string_proc_list_invert_order(list);
+	string_proc_list_print(list_inverted, stdout);
+	
+	string_proc_list_destroy(list_inverted);
 	string_proc_list_destroy(list);
 }
 
 //TODO:debe implementar
 /**
-*	crea una lista con cinco dos nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
-*	(string_proc_list_invert_order) e imprimir la copia
-*/
-void test_list_invert_order(){
-	printf("Probando invertir el orden de la lista\n============\n");
-}
-
-//TODO:debe implementar
-/**
-*	crea una lista con cinco dos nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
+*	crea una lista con cinco nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
 *	(string_proc_list_invert_order) y hace la llamada a string_proc_list_apply_print_trace
 */
 void test_list_apply_print_trace(){

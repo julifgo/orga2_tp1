@@ -3,7 +3,7 @@
 #include "string_processor.h"
 #include "string_processor_utils.h"
 
-//TODO: debe implementar
+
 /**
 *	Debe devolver el largo de la lista pasada por parámetro
 */
@@ -18,7 +18,7 @@ uint32_t string_proc_list_length(string_proc_list* list){
 	return len; 
 }
 
-//TODO: debe implementar
+
 /**
 *	Debe insertar el nodo con los parámetros correspondientes en la posición indicada por index desplazando en una
 *	posición hacia adelante los nodos sucesivos en caso de ser necesario, la estructura de la lista debe ser
@@ -69,7 +69,7 @@ bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, st
 	return true;
 }
 
-//TODO: debe implementar
+
 /**
 *	Debe eliminar el nodo que se encuentra en la posición indicada por index de ser posible
 *	la lista debe ser actualizada de forma acorde y debe devolver true si pudo eliminar el nodo o false en caso contrario
@@ -101,11 +101,19 @@ bool string_proc_list_remove_node_at(string_proc_list* list, uint32_t index){
 	return true;
 }
 
-//TODO: debe implementar
+
 /**
 *	Debe devolver una copia de la lista pasada por parámetro copiando los nodos en el orden inverso
 */
-string_proc_list* string_proc_list_invert_order(string_proc_list* list){ return NULL; }
+string_proc_list* string_proc_list_invert_order(string_proc_list* list){ 
+	string_proc_list* new_list		= string_proc_list_create(list->name);
+	string_proc_node* current_node	= list->last;
+	while(current_node != NULL){
+		string_proc_list_add_node(new_list, current_node->f, current_node->g, current_node->type);
+		current_node	= current_node->previous;
+	}
+	return new_list;
+}
 
 //TODO: debe implementar
 /**
@@ -117,19 +125,29 @@ string_proc_list* string_proc_list_invert_order(string_proc_list* list){ return 
 */
 void string_proc_list_apply_print_trace(string_proc_list* list, string_proc_key* key, bool encode, FILE* file){}
 
-//TODO: debe implementar
+
 /**
 *	Debe desplazar en dos posiciones hacia adelante el valor de cada caracter de la clave pasada por parámetro
 *	si el mismo se encuentra en una posición impar, resolviendo los excesos de representación por saturación
 */
-void saturate_2_odd(string_proc_key* key){}
+void saturate_2_odd(string_proc_key* key){
+	uint32_t i;
+	for(i = 1; i < key->length; i+=2){
+		key->value[i] = saturate_int(((int32_t)key->value[i]) + 2);
+	}
+}
 
-//TODO: debe implementar
+
 /**
 *	Debe desplazar en dos posiciones hacia atrás el valor de cada caracter de la clave pasada por parámetro
 *	si el mismo se encuentra en una posición impar, resolviendo los excesos de representación por saturación
 */
-void unsaturate_2_odd(string_proc_key* key){}
+void unsaturate_2_odd(string_proc_key* key){
+	uint32_t i;
+	for(i = 1; i < key->length; i+=2){
+		key->value[i] = saturate_int(((int32_t)key->value[i]) - 2);
+	}
+}
 
 //TODO: debe implementar
 /**
@@ -144,3 +162,4 @@ void shift_position_prime(string_proc_key* key){}
 *	si el mismo se encuentra en una posición que sea un número primo, resolviendo los excesos de representación con wrap around
 */
 void unshift_position_prime(string_proc_key* key){}
+
