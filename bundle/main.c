@@ -265,9 +265,16 @@ void test_list_add_remove_node(){
 	printf("Probando agregar y quitar nodo\n============\n");
 	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
 	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se agrega un nodo");
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
+	string_proc_list_print(list, stdout);
+	printf("%s\n", "Se elimina el nodo");
+	string_proc_list_remove_node_at(list, 0);
+	string_proc_list_print(list, stdout);
+
 
 	//lista vacia
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
+	/*string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
 	//agregar al ppio
 	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 0);
 	//agregar al final
@@ -281,8 +288,8 @@ void test_list_add_remove_node(){
 	//agrega al final
 	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 6);
 	//agrega al ppio
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
-	string_proc_list_print(list, stdout);
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);*/
+	//string_proc_list_print(list, stdout);
 
 	//agregamos un elemento fuera de rango
 	bool res = string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);

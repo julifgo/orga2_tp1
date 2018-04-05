@@ -75,7 +75,30 @@ bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, st
 *	la lista debe ser actualizada de forma acorde y debe devolver true si pudo eliminar el nodo o false en caso contrario
 */
 bool string_proc_list_remove_node_at(string_proc_list* list, uint32_t index){
-	return false;
+	if(index >= string_proc_list_length(list))
+		return false; 
+	
+	uint32_t i = 0;
+	string_proc_node* current_node	= list->first;
+	while(i < index){
+		current_node = current_node->next;
+		i++;
+	}
+	if(current_node->next == NULL){//era el ultimo, se actualiza last
+		list->last = current_node->previous;
+	}
+	else
+		current_node->next->previous = current_node->previous;
+	if(current_node->previous == NULL){//era el primero, se actualiza el first
+		list->first = current_node->next;
+	}
+	else
+		current_node->previous->next = current_node->next;
+	//redefino los nexts y lasts de los nodos previous y next
+	
+	free(current_node);
+
+	return true;
 }
 
 //TODO: debe implementar
