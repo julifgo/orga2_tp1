@@ -228,6 +228,25 @@ void test_combo_irreversible(){
 */
 void test_list_length(){
 	printf("Probando largo lista\n============\n");
+	string_proc_list * list	= string_proc_list_create("lista length");
+	uint32_t l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+
+
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &shift_position, &unshift_position, REVERSIBLE);
+	
+	l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+	string_proc_list_print(list, stdout);
+
+	string_proc_list_destroy(list);
 }
 
 //TODO:debe implementar
@@ -241,7 +260,49 @@ void test_list_length(){
 *		agrega y quita un nodo reversible en la posición 2
 */
 void test_list_add_remove_node(){
+	//TODO. Escribir bien los casos de prueba, por ejemplo. si no se puede, printear que no se pudo y que era lo esperado
+	//imprimir todos los estados. cuando se agrega y cuando se remueve
 	printf("Probando agregar y quitar nodo\n============\n");
+	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
+	string_proc_list_print(list, stdout);
+
+	//lista vacia
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
+	//agregar al ppio
+	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 0);
+	//agregar al final
+	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 2);
+	//agrega anteultimo
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 2);
+	//agrega en el medio
+	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 2);
+	//agrega anteultimo
+	string_proc_list_add_node_at(list, &saturate_2, &unsaturate_2, IRREVERSIBLE, 4);
+	//agrega al final
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 6);
+	//agrega al ppio
+	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
+	string_proc_list_print(list, stdout);
+
+	//agregamos un elemento fuera de rango
+	bool res = string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
+	printf("Se intento agregar un nodo en la posicion 10, el resultado debe ser 0 y es %d\n", res);
+	
+
+	/*l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+
+
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &shift_position, &unshift_position, REVERSIBLE);
+	
+	l1 = string_proc_list_length(list);
+	printf("largo de lista %s: %d\n", list->name, l1);
+	string_proc_list_print(list, stdout);*/
+
+	string_proc_list_destroy(list);
 }
 
 //TODO:debe implementar
@@ -308,7 +369,9 @@ void run_tests(){
 
 	test_odd_prime();*/
 
-	test_create_destroy_list();
+	//TEST ORDENADOS MIOS
+
+	/*test_create_destroy_list();
 
 	test_create_destroy_node();
 
@@ -322,7 +385,9 @@ void run_tests(){
 
 	test_saturate_2();
 
-	test_saturate_position();
+	test_saturate_position();*/
+
+	test_list_add_remove_node();
 }
 
 int main (void){

@@ -29,7 +29,7 @@ uint32_t string_proc_list_length(string_proc_list* list){
 */
 bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, string_proc_func g, string_proc_func_type type, uint32_t index){ 
 	/*Si index == list_length => inserta al final. Siguiendo esa lógica,si el index es 0, se inserta al principio. Si es 1, se inserta segundo, si es list_length -1 anteultimo*/
-	/*if(index > string_proc_list_length(list))
+	if(index > string_proc_list_length(list))
 		return false; 
 		
 	if(string_proc_list_length(list) == 0){
@@ -65,7 +65,7 @@ bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, st
 	node->previous = current_node->previous;
 	current_node->previous->next = node;
 	current_node->previous = node;
-	node->next = current_node;*/
+	node->next = current_node;
 	return true;
 }
 
@@ -74,7 +74,9 @@ bool string_proc_list_add_node_at(string_proc_list* list, string_proc_func f, st
 *	Debe eliminar el nodo que se encuentra en la posición indicada por index de ser posible
 *	la lista debe ser actualizada de forma acorde y debe devolver true si pudo eliminar el nodo o false en caso contrario
 */
-bool string_proc_list_remove_node_at(string_proc_list* list, uint32_t index){return false; }
+bool string_proc_list_remove_node_at(string_proc_list* list, uint32_t index){
+	return false;
+}
 
 //TODO: debe implementar
 /**

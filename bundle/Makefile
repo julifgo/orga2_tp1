@@ -24,4 +24,5 @@ clean:
 	rm -f *.o
 	rm -f main tester
 	rm -f salida.caso.*
+	reset
 
