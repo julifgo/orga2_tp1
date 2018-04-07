@@ -180,7 +180,7 @@ void test_combo_irreversible(){
 	printf("Probando combo irreversible\n============\n");
 	string_proc_list * list	= string_proc_list_create("nueva lista");
 	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
-	string_proc_list_add_node(list, &unsaturate_position, &saturate_position, REVERSIBLE);
+	string_proc_list_add_node(list, &unsaturate_position, &saturate_position, IRREVERSIBLE);
 	string_proc_key* key	= string_proc_key_create("hola mundo");
 
 	string_proc_list_apply(list, key, true);
@@ -264,15 +264,15 @@ void test_list_add_remove_node(){
 	//imprimir todos los estados. cuando se agrega y cuando se remueve
 	printf("Probando agregar y quitar nodo\n============\n");
 	printf("%s\n", "Se crea una lista vacia");
-	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
-	string_proc_list_print(list, stdout);
+	string_proc_list * list1	= string_proc_list_create("lista add_remove_node");
+	string_proc_list_print(list1, stdout);
 	printf("%s\n", "Se agrega un nodo al comienzo");
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 0);
-	string_proc_list_print(list, stdout);
+	string_proc_list_add_node_at(list1, &shift_2, &unshift_2, REVERSIBLE, 0);
+	string_proc_list_print(list1, stdout);
 	printf("%s\n", "Se elimina el nodo");
-	string_proc_list_remove_node_at(list, 0);
-	string_proc_list_print(list, stdout);
-	string_proc_list_destroy(list);
+	string_proc_list_remove_node_at(list1, 0);
+	string_proc_list_print(list1, stdout);
+	string_proc_list_destroy(list1);
 	
 	//5 nodos
 	string_proc_list * list	= string_proc_list_create("lista add_remove_node");
@@ -300,7 +300,7 @@ void test_list_add_remove_node(){
 	bool res = string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
 	printf("Se intento agregar un nodo en la posicion 10, el resultado es %d\n", res);
 	string_proc_list_print(list, stdout);
-	res = string_proc_list_remove_node_at(list, &shift_2, &unshift_2, REVERSIBLE, 10);
+	res = string_proc_list_remove_node_at(list, 10);
 	printf("Se intento quitar un nodo en la posicion 10, el resultado es %d\n", res);
 	string_proc_list_print(list, stdout);
 	
@@ -315,7 +315,7 @@ void test_list_add_remove_node(){
 
 }
 
-//TODO:debe implementar
+
 /**
 *	crea una lista con cinco nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
 *	(string_proc_list_invert_order) e imprimir la copia
@@ -328,7 +328,7 @@ void test_list_invert_order(){
 	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
 	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
 	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
-	string_proc_list_add_node_at(list, &shift_2, &unshift_2, REVERSIBLE);
+	string_proc_list_add_node(list, &shift_2, &unshift_2, REVERSIBLE);
 	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
 	string_proc_list_print(list, stdout);
 	
@@ -341,22 +341,60 @@ void test_list_invert_order(){
 	string_proc_list_destroy(list);
 }
 
-//TODO:debe implementar
+
 /**
 *	crea una lista con cinco nodos irreversibles, uno reversible y uno irreversible (en ese orden), imprimirla, conseguir la copia de orden inverso 
 *	(string_proc_list_invert_order) y hace la llamada a string_proc_list_apply_print_trace
 */
 void test_list_apply_print_trace(){
 	printf("Probando apply print trace\n============\n");
+	string_proc_list * list	= string_proc_list_create("apply trace list");
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2_odd, &unsaturate_2_odd, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
+	string_proc_list_add_node(list, &shift_position_prime, &unshift_position_prime, REVERSIBLE);
+	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
+
+	string_proc_list * list_inverted = string_proc_list_invert_order(list);
+	string_proc_key* key	= string_proc_key_create("hemos ido demasiado lejos y se acerca la hora de detenernos a reflexionar");
+	
+	string_proc_list_apply_print_trace(list,key, true, stdout);
+
+	string_proc_list_destroy(list_inverted);
+	string_proc_list_destroy(list);
+	string_proc_key_destroy(key);
 }
 
-//TODO:debe implementar
+
 /**
 *	probar las funciones saturate_2_odd, unsaturate_2_odd, shift_position_prime, unshift_position_prime
 *	sobre el string "hemos ido demasiado lejos y se acerca la hora de detenernos a reflexionar"
 */
 void test_odd_prime(){
 	printf("Probando operaciones sobre posiciones impares y primas\n============\n");
+	string_proc_list * list_odd	= string_proc_list_create("nueva lista odd");
+	string_proc_list_add_node(list_odd, &saturate_2_odd, &unsaturate_2_odd, IRREVERSIBLE);
+	string_proc_key* key	= string_proc_key_create("hemos ido demasiado lejos y se acerca la hora de detenernos a reflexionar");
+
+	string_proc_list_apply(list_odd, key, true);
+	printf("%s\n", key->value);
+	string_proc_list_apply(list_odd, key, false);
+	printf("%s\n", key->value);
+	printf("\n");
+	string_proc_list_destroy(list_odd);
+
+	string_proc_list * list_prime = string_proc_list_create("nueva lista prime");
+	string_proc_list_add_node(list_prime, &shift_position_prime, &unshift_position_prime, IRREVERSIBLE);
+
+	string_proc_list_apply(list_prime, key, true);
+	printf("%s\n", key->value);
+	string_proc_list_apply(list_prime, key, false);
+	printf("%s\n", key->value);
+	printf("\n");
+	string_proc_key_destroy(key);
+	string_proc_list_destroy(list_prime);
 }
 
 /**
@@ -414,7 +452,11 @@ void run_tests(){
 
 	test_saturate_position();*/
 
-	test_list_add_remove_node();
+//	test_list_add_remove_node();
+//	test_list_invert_order();
+	//test_odd_prime();
+	//test_combo_irreversible();
+	test_list_apply_print_trace();
 }
 
 int main (void){
