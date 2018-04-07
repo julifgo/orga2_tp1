@@ -1,4 +1,3 @@
-﻿1) segun convencion C, si los parametros que llegan a una funcion llegan en RDI, RSI, etc (si estamos hablando de ints o punteros), entonces la parte alta debe estar seteada correctamente todo el tiempo (porque justamente el parametro viene en RDI y no en la minima porcion de registro que entra el parametro). ¿Esto es asi?
 
 
 

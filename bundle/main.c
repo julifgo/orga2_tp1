@@ -10,6 +10,7 @@
 *	crea y destruye a una lista vacía
 */
 void test_create_destroy_list(){
+	printf("Probando creacion y destruccion de lista\n============\n");
 	string_proc_list * list	= string_proc_list_create("nueva lista");
 	string_proc_list_destroy(list);
 }
@@ -20,6 +21,7 @@ void test_create_destroy_list(){
 *	(por ej. shift_2, unshift_2)
 */
 void test_create_destroy_node(){
+	printf("Probando nodo\n============\n");
 	string_proc_node* node	= string_proc_node_create(&shift_2, &unshift_2, REVERSIBLE);
 	printf("%s\n", string_proc_func_type_string(node->type));
 	string_proc_node_destroy(node);
@@ -29,6 +31,7 @@ void test_create_destroy_node(){
 *	crea y destruye una clave 
 */
 void test_create_destroy_key(){
+	printf("Probando key\n============\n");
 	char *msg = "hola";
 	string_proc_key* key	= string_proc_key_create(msg);
 	//printf("%s ; length %d\n",key->value, key->length );
@@ -39,6 +42,7 @@ void test_create_destroy_key(){
 *	crea una lista y la imprime por salida standard (stdout)		
 */
 void test_print_list(){
+	printf("Probando test_list\n============\n");
 	string_proc_list * list	= string_proc_list_create("nueva lista");
 	string_proc_list_print(list, stdout);
 	string_proc_list_destroy(list);
@@ -249,7 +253,7 @@ void test_list_length(){
 	string_proc_list_destroy(list);
 }
 
-//TODO:debe implementar
+
 /**
 *	para todos los casos imprimir los estados de la lista
 *	crea una lista vacía y le agrega y quita un elemento al comienzo
@@ -260,8 +264,7 @@ void test_list_length(){
 *		agrega y quita un nodo reversible en la posición 2
 */
 void test_list_add_remove_node(){
-	//TODO. Escribir bien los casos de prueba, por ejemplo. si no se puede, printear que no se pudo y que era lo esperado
-	//imprimir todos los estados. cuando se agrega y cuando se remueve
+	
 	printf("Probando agregar y quitar nodo\n============\n");
 	printf("%s\n", "Se crea una lista vacia");
 	string_proc_list * list1	= string_proc_list_create("lista add_remove_node");
@@ -356,12 +359,12 @@ void test_list_apply_print_trace(){
 	string_proc_list_add_node(list, &saturate_2, &unsaturate_2, IRREVERSIBLE);
 	string_proc_list_add_node(list, &shift_position_prime, &unshift_position_prime, REVERSIBLE);
 	string_proc_list_add_node(list, &saturate_position, &unsaturate_position, IRREVERSIBLE);
-
+	
 	string_proc_list * list_inverted = string_proc_list_invert_order(list);
 	string_proc_key* key	= string_proc_key_create("hemos ido demasiado lejos y se acerca la hora de detenernos a reflexionar");
 	
 	string_proc_list_apply_print_trace(list,key, true, stdout);
-
+	string_proc_list_apply_print_trace(list,key, false, stdout);
 	string_proc_list_destroy(list_inverted);
 	string_proc_list_destroy(list);
 	string_proc_key_destroy(key);
@@ -403,7 +406,7 @@ void test_odd_prime(){
 void run_tests(){
 
 	//tests principales
-	/*test_create_destroy_list();
+	test_create_destroy_list();
 
 	test_create_destroy_node();
 
@@ -432,31 +435,8 @@ void run_tests(){
 
 	test_list_apply_print_trace();
 
-	test_odd_prime();*/
+	test_odd_prime();
 
-	//TEST ORDENADOS MIOS
-
-	/*test_create_destroy_list();
-
-	test_create_destroy_node();
-
-	test_create_destroy_key();
-
-	test_list_length();
-
-	test_shift_2();
-
-	test_shift_position();
-
-	test_saturate_2();
-
-	test_saturate_position();*/
-
-//	test_list_add_remove_node();
-//	test_list_invert_order();
-	//test_odd_prime();
-	//test_combo_irreversible();
-	test_list_apply_print_trace();
 }
 
 int main (void){

@@ -66,17 +66,18 @@ string_proc_node_create:
 	mov rbp, rsp
 	push rdi ;desalineada
 	push rsi ;alineada
-	push rdx ;desalineada ;TODO. RESOLVER DUDA 1 PARA SABER SI LA PARTE ALTA DE ESTE REGISTRO PODRIA VENIR SUCIA
+	
+	mov edx, edx ;limpio la parte alta de rdx para pushearlo correctamente
+	push rdx ;desalineada 
 	sub rsp, 8 ;alineada
 
 	mov rdi, struct_node_size ;pido memoria para almacenar la estructura de un nodo
 	call malloc	
 
-	xor rdx, rdx ;limpio rdx ya que ahi ira el enum de 4 bytes del tipo
-	add rsp, 8
-	pop rdx 
-	pop rsi
-	pop rdi 
+	add rsp, 8 ;desalineada
+	pop rdx  ;alineada
+	pop rsi ;desalineada
+	pop rdi ;alineada
 
 	mov rcx, NULL ;rcx no debe ser preservado
 
@@ -99,9 +100,9 @@ string_proc_key_create:
 	mov r12, rdi ;resguardo rdi para no perderlo luego del call
 	
 	call str_len ;uso la funcion auxiliar de c de longitud con el value que ya esta en rdi
-	xor r13, r13 ;limpio r13 ya que str_len devuelve doubleword (unsigned)
+	mov eax, eax
 	mov r13, rax ;muevo el length del value
-	;es importante moverlo a un registro que deba preservar valor, sino str_copy o malloc podria pisarlo (por ejemplo si se usara rdx e vez de r13)
+	;es importante moverlo a un registro que deba preservar valor, sino str_copy o malloc podria pisarlo
 
 	mov rdi, r12
 	call str_copy
@@ -210,6 +211,7 @@ string_proc_list_add_node: ;se debe agregar el nodo al final de la lista
 	push rdi ;alineada
 	push rsi ;desalineada
 	push rdx ;alineada 
+	mov ecx, ecx ;limpio la parte alta de rcx puesto que el type es de 4 bytes
 	push rcx ;desalineada
 	sub rsp, 8 ;alineada
 
@@ -260,7 +262,8 @@ string_proc_list_apply:
 
 	mov r13, rdi ;muevo la lista a r13, para dejar rdi para los call
 	mov r15, rsi ;muevo la key a r15 para que no se afecte su valor en los call
-	cmp rdx, FALSE ;TODO. DESPEJAR DUDA 1
+	mov dl, dl ;limpio los 7 bytes mas altos de rdx
+	cmp rdx, FALSE
 	JE .decode ;si encode==false => decode
 		mov r12, [r13 + struct_lista_offset_first]
 		.ciclo_encode:

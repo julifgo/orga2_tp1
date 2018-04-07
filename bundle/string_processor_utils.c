@@ -131,7 +131,7 @@ string_proc_list* string_proc_list_invert_order(string_proc_list* list){
 	return new_list;
 }
 
-//TODO: debe implementar
+
 /**
 *	Hace una llamada sucesiva a los nodos de la lista pasada por parámetro siguiendo la misma lógica
 *	que string_proc_list_apply pero comienza imprimiendo una línea 
@@ -145,20 +145,14 @@ void string_proc_list_apply_print_trace(string_proc_list* list, string_proc_key*
 		string_proc_node* current_node	= list->first;
 		while(current_node != NULL){
 			current_node->f(key);
-			//void (*pepe) (string_proc_key*) = current_node->f;
-
-			//void *pepa = (void *)current_node->f;
-
-			//PARA DEBUGGEAR, AL CREAR UN NODO, VER SI PODEMOS VER CUAL ES LA POSICION DE MEMORIA QUE
-			//GUARDA EN NODE->F, ESA DEBERIA SER LA QUE TENEMOS QUE MOSTRAR.
-			//PORQUE PUEDE SER QUE ESTEMOS MOSTRANDO LA POSICION DE MEMORIA DEL STRUCT+OFFSET_F
-			fprintf(file,"Applying function at [%p] to get '%s'\n", current_node->f,key->value);
+			fprintf(file,"Applying function at [%lx] to get '%s'\n", (unsigned long)current_node->f,key->value);
 			current_node = current_node->next;
 		}
 	}else{
 		string_proc_node* current_node	= list->last;
 		while(current_node != NULL){
 			current_node->g(key);
+			fprintf(file,"Applying function at [%lx] to get '%s'\n", (unsigned long)current_node->g,key->value);
 			current_node = current_node->previous;
 		}
 	}
